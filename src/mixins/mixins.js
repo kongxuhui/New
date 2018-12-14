@@ -24,11 +24,31 @@ export const queryMixin = {
             })
         },
         getData(url) {
-            this.$http.get(url).then(data => {
-                // console.log(data);
-                this.totalCount = data.totalCount;
-                this.queryCallBack(data);
-            })
+            if(this.getCookie('lang')){
+                if (url.indexOf("?") != -1) {
+                    this.$http.get(url + '&lang=' + this.getCookie('lang')).then(data => {
+                        this.totalCount = data.totalCount;
+                        this.queryCallBack(data);
+                    })
+                }else{
+                    this.$http.get(url + '?lang=' + this.getCookie('lang')).then(data => {
+                        this.totalCount = data.totalCount;
+                        this.queryCallBack(data);
+                    })
+                }
+            }else{
+                if (url.indexOf("?") != -1) {
+                    this.$http.get(url + '&lang=CHS').then(data => {
+                        this.totalCount = data.totalCount;
+                        this.queryCallBack(data);
+                    })
+                }else{
+                    this.$http.get(url + '?lang=CHS').then(data => {
+                        this.totalCount = data.totalCount;
+                        this.queryCallBack(data);
+                    })
+                }
+            }
         },
     },
     computed: {

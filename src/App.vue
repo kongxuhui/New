@@ -34,6 +34,9 @@
 </script>
 <style lang="less">
     @import './assets/css/common.css';
+    // @import './assets/css/buttons.css';
+    // @import './assets/css/common.css';
+    // @import './assets/css/common.css';
     // @import './assets/css/mocommon.css';
     // @import './assets/css/pccommon.css';    
 </style>

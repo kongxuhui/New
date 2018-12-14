@@ -2,9 +2,9 @@
     <div class="shopmsg min-width">
         <ul>
             <li v-for="(item,index) in productList" :key="index">
-                <div v-if="index/2 === 0" class="width msg-box clearfix">
+                <div v-if="index/2 === 0 && $store.state.ispc" class="width msg-box clearfix">
                     <div class="left img-box">
-                        <img v-bind:src="item.sale_img"/>
+                        <img v-bind:src="item.img"/>
                     </div>
                     <div class="right text-box">
                         <h2>{{item.size}}</h2>
@@ -12,28 +12,50 @@
                         <div class="text">
                             <p>{{item.descript}}</p>
                         </div>
-                        <div class="btn-box">
-                            <a href="javascript:;" class="blue">Amazon <b>&raquo;</b></a>
-                            <a href="javascript:;">AliExpress <b>&raquo;</b></a>
+                        <div class="btn-box" v-if="$store.state.ispc">
+                            <a v-bind:href="item.sale_url">Amazon<b>&raquo;</b></a>
+                            <a href="javascript:;">AliExpress<b>&raquo;</b></a>
                             <a href="javascript:;" @click="handleMore(item.id)">查看更多 <b>&raquo;</b></a>
+                            <!-- <a href="javascript:;">AliExpress <b>&raquo;</b></a> -->
+                            <!-- <a href="javascript:;" @click="handleMore(item.id)">查看更多 <b>&raquo;</b></a> -->
                         </div>
                     </div>
                 </div>
-                <div v-else class="width msg-box clearfix">
+                <div v-if="index/2 != 0 && $store.state.ispc" class="width msg-box clearfix">
                     <div class="left text-box">
                         <h2>{{item.size}}</h2>
                         <h2>{{item.name}}</h2>
                         <div class="text">
                             <p>{{item.descript}}</p>
                         </div>
-                        <div class="btn-box">
-                            <a href="javascript:;" class="blue">Amazon <b>&raquo;</b></a>
-                            <a href="javascript:;">AliExpress <b>&raquo;</b></a>
-                            <a href="javascript:;" @click="handleMore(item.id)">查看更多 <b>&raquo;</b></a>
+                        <div class="btn-box" v-if="$store.state.ispc">
+                            <a v-bind:href="item.sale_url">Amazon <b>&raquo;</b></a>
+                            <a href="javascript:;">AliExpress<b>&raquo;</b></a>
+                            <a href="javascript:;" @click="handleMore(item.id)">查看更多 <b>&raquo;</b></a>                            
+                            <!-- <a href="javascript:;">AliExpress <b>&raquo;</b></a> -->
+                            <!-- <a href="javascript:;" @click="handleMore(item.id)">查看更多 <b>&raquo;</b></a> -->
+                            <!-- <a href="javascript:;" @click="handleMore(item.id)">查看更多 <b>&raquo;</b></a> -->
                         </div>
                     </div>
                     <div class="right img-box">
-                        <img v-bind:src="item.sale_img"/>
+                        <img v-bind:src="item.img"/>
+                    </div>
+                </div>
+                <div class="width msg-box clearfix" v-if="!$store.state.ispc">
+                    <div class="left img-box">
+                        <img v-bind:src="item.img"/>
+                    </div>
+                    <div class="right text-box">
+                        <h2>{{item.size}}</h2>
+                        <h2>{{item.name}}</h2>
+                        <div class="text">
+                            <p>{{item.descript}}</p>
+                        </div>
+                        <div class="btn-box" v-if="!$store.state.ispc">
+                            <a href="javascript:;" @click="handleMore(item.id)">查看更多<b>&raquo;</b></a>
+                            <a v-bind:href="item.sale_url">Amazon</a>
+                            <a href="javascript:;">AliExpress</a>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -60,31 +82,56 @@
 
 <style scoped lang="less">
 
-    .btn-box .blue{
-        color: white;
-        background-color: #000;
-    }
+    
+    // .btn-box>a:hover{
+    //     background-color: red;
+    // }
     .btn-box>a{
+        padding: 0.5em 2em;
+        border: none;
+        z-index: 1;
+        color: #000;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
         display: inline-block;
-        height: 30px;
-        line-height: 26px;
-        padding: 0 8px;
+        min-width: 140px;
+        // line-height: 30px;
         font-size: 18px;
         margin-right: 20px;
-        color: #000;
         overflow: hidden;
-        >b{
-            display: inline-block;
-            font-size: 24px;
-            font-weight: 200;
-            -webkit-transform: translateY(1px);
-            -moz-transform: translateY(1px);
-            -ms-transform: translateY(1px);
-            -o-transform: translateY(1px);
-            transform: translateY(1px);
+        position: relative;
+        -webkit-transition: border-color 0.5s, color 0.5s;
+        transition: border-color 0.5s, color 0.5s;
+        -webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+        transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+        &::before{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%;
+            height: 100%;
+            background-color:#000;
+            z-index: -1;
+            -webkit-transform: rotate3d(0, 0, 1, -45deg) translate3d(0, -3em, 0);
+            transform: rotate3d(0, 0, 1, -45deg) translate3d(0, -3em, 0);
+            -webkit-transform-origin: 0% 100%;
+            transform-origin: 0% 100%;
+            -webkit-transition: -webkit-transform 0.5s, opacity 0.5s, background-color 0.5s;
+            transition: transform 0.5s, opacity 0.5s, background-color 0.5s;
+        }
+        &:hover{
+            color: #fff;
+            border-color:#000;
+        }
+        &:hover::before {
+            opacity: 1;
+            background-color:#000;
+            -webkit-transform: rotate3d(0, 0, 1, 0deg);
+            transform: rotate3d(0, 0, 1, 0deg);
+            -webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+            transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
         }
     }
     .text-box{
@@ -112,7 +159,7 @@
     }
     .msg-box>div{
         overflow: hidden;
-        width: 49%;
+        width: 620px;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
@@ -122,7 +169,8 @@
         float: left;
     }
     .msg-box>.img-box>img{
-        max-width: 500px;
+        width: 620px;
+        height: 488px;
     }
     .msg-box>.left{
         float: left;
@@ -157,10 +205,12 @@
             img{
                 width: 80%;
                 min-width: auto;
+                height: auto;
             }
         }
         .shopmsg li{
             padding-top: 2.5rem;
+            padding-bottom: 20px;
         }
         .msg-box{
             .text-box{
@@ -176,16 +226,24 @@
                     display: block;
                     margin-right: 0;
                     padding: 0;
-                    font-size: 1.4rem;
-                    height: 3.5rem;
-                    line-height: 3.5rem;
+                    font-size: 1.2rem;
+                    height: 1.8rem;
+                    line-height: 1.8rem;
                     background-color: #000;
+                    &::before,
+                    &::after{
+                        display: none;
+                    }
                 }
                 .btn-box>a:not(.blue){
                     margin-top: 0.6rem;
                     display: inline-block;
                     width: 47%;
                     color: white;
+                }
+                .btn-box>a:nth-child(1){
+                    width: 100%;
+                    letter-spacing:6px;
                 }
                 .btn-box>a:nth-child(2){
                     margin-right: 3%;
@@ -201,5 +259,11 @@
                 }
             }
         }
+        .button--tamaya {
+        overflow: hidden;
+        color: #7986cb;
+        min-width: 180px;
+    }
+
     }
 </style>

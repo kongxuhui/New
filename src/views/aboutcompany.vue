@@ -6,35 +6,31 @@
         <div class="company min-width">
             <div class="width">
                 <div class="title">
-                    <h2>{{$t('message.successfullysubscribed')}}</h2>
+                    <h2>{{$t('message.conmanyIn')}}</h2>
                     <p>COMPANY INTRODUCTION</p>
                 </div>
                 <div class="text" v-if="!$store.state.ispc">
-                    <p>{{$t('message.COMPANYINTRODUCTION')}}</p>
+                    <p>{{companyObj.introduce}}</p>
                 </div>
                 <div class="img">
-                    <img src="../assets/img/company_03.jpg"/>
-                    <img src="../assets/img/company_03.jpg"/>
-                    <img src="../assets/img/company_03.jpg"/>
+                    <img v-for="(item,index) in companyObj.introduce_img" :key="index" v-bind:src="item"/>
                 </div>
                 <div class="text" v-if="$store.state.ispc">
-                    <p>{{$t('message.COMPANYINTRODUCTION')}}</p>
+                    <p>{{companyObj.introduce}}</p>
                 </div>
             </div>
         </div>
         <div class="company min-width">
             <div class="width">
                 <div class="title">
-                    <h2>企业文化</h2>
+                    <h2>{{$t('message.cultrue')}}</h2>
                     <p>CORPORATE CULTURE</p>
                 </div>
                 <div class="text">
-                    <p>{{$t('message.CORPORATECULTURE')}}</p>
+                    <p>{{companyObj.culture}}</p>
                 </div>
                 <div class="img">
-                    <img src="../assets/img/company_03.jpg"/>
-                    <img src="../assets/img/company_03.jpg"/>
-                    <img src="../assets/img/company_03.jpg"/>
+                    <img v-for="(item,index) in companyObj.culture_img" :key="index" v-bind:src="item"/>
                 </div>
 
             </div>
@@ -42,29 +38,17 @@
         <div class="company min-width">
             <div class="width">
                 <div class="title">
-                    <h2>荣誉展示</h2>
+                    <h2>{{$t('message.honor')}}</h2>
                     <p>HONOR DISPLAY</p>
                 </div>
                 <div class="img" v-if="$store.state.ispc">
-                    <img src="../assets/img/company_03.jpg"/>
-                    <img src="../assets/img/company_03.jpg"/>
-                    <img src="../assets/img/company_03.jpg"/>
+                    <img v-for="(item,index) in companyObj.honor_img" :key="index" v-bind:src="item"/>
                 </div>
                 <div class="width" v-if="!$store.state.ispc">
                     <swiper :options="swiperOption">
-                        <swiper-slide class="banner-item">
+                        <swiper-slide class="banner-item" v-for="(item,index) in companyObj.honor_img" :key="index">
                             <div>
-                                <img src="../assets/img/company_03.jpg"/>
-                            </div>
-                        </swiper-slide>
-                        <swiper-slide class="banner-item">
-                            <div>
-                                <img src="../assets/img/company_03.jpg"/>
-                            </div>
-                        </swiper-slide>
-                        <swiper-slide class="banner-item">
-                            <div>
-                                <img src="../assets/img/company_03.jpg"/>
+                                <img v-bind:src="item"/>                                
                             </div>
                         </swiper-slide>
                         <div class="swiper-button-prev" slot="button-prev"></div>
@@ -91,6 +75,8 @@
         name: "aboutcompany",
         data(){
             return{
+                url: 'company/info',
+                companyObj: {},
                 swiperOption: {
                     slidesPerView: 1,
                     spaceBetween: 60,
@@ -105,7 +91,14 @@
             }
         },
         methods:{
-
+            queryCallBack(data) {
+                this.companyObj = data.data || {};
+            }
+        },
+        created() {
+            // if(this.getCookie('lang')){
+                this.getData(this.url);
+            // }
         },
         components:{
             navigation,
@@ -142,11 +135,11 @@
             padding: 15px 0 0px 0;
             text-align: center;
             >img{
-                width: 30%;
+                width: 400px;
                 display: inline-block;
             }
             >img:nth-child(2){
-                margin: 0 3.3%;
+                margin: 0 13px;
             }
         }
     }

@@ -5,10 +5,17 @@
       <banner :banner-list="bannerList"></banner>
       <shopmsg :product-list="productList"></shopmsg>
       <div class="allshop min-width">
-          <div class="allshop-smallbox">
+          <div class="width">
+            <a href="javascript:;" class="allshop-smallbox" @click="handleGetAll()">
+                <img src="../assets/img/allshop.png"/>
+                <h2>查看所有商品</h2>
+            </a>
+          </div>
+          
+          <!-- <div class="allshop-smallbox" @click="handleGetALl()">
               <img src="../assets/img/allshop.png"/>
               <h2>查看所有商品</h2>
-          </div>
+          </div> -->
       </div>
       <allbanner></allbanner>
       <subscribe></subscribe>
@@ -32,21 +39,23 @@ export default {
     data(){
       return{
           url: 'model_main_page/info',
+          url_1: 'user/visit',          
           bannerList: [],
           productList: [],
       }
     },
     methods:{
         queryCallBack(data) {
-            console.log(data)
             this.bannerList = data.data.banner || [];
             this.productList = data.data.product_list || [];            
         },
+        handleGetAll(){
+            this.$router.push('/goods');
+        }
     },
     created() {
         this.getData(this.url);
-    },
-    mounted(){
+        this.$http.get(this.url_1);       
     },
     components: {
         footerd,
@@ -88,22 +97,22 @@ export default {
     }
     @media screen and (max-width: 768px) {
         .allshop{
-            height: 6.5rem;
+            height: 4rem;
             display: flex;
             justify-content: center;
             align-items: center;
             .allshop-smallbox{
-                height: 3.2rem;
+                height: 1.8rem;
                 margin-top:0;
                 /*padding: 0.01rem;*/
                 img{
-                    width: 3rem;
-                    height: 3rem;
+                    width: 2rem;
+                    height: 2rem;   
                 }
             }
         }
         .allshop h2{
-            font-size: 1.8rem;
+            font-size: 1.6rem;
         }
     }
 </style>

@@ -3,54 +3,56 @@
         <navigation v-if="$store.state.ispc"></navigation>
         <mo-navigation v-if="!$store.state.ispc"></mo-navigation>
         <banner></banner>
+        <div class="min-width music" v-for="(item,index) in sub_del.subject_img" :key="index" v-if="index<1">
+            <img v-bind:src="item"  v-if="$store.state.ispc"/>
+        </div>
         <div class="min-width">
             <div class="width shopmsg clearfix">
-                <img src="../assets/img/shopimg2.png" class="right"/>
+                <img v-bind:src="pro_del.sale_img" class="right"/>
                 <div class="left">
-                    <h2>NB-H88</h2>
-                    <h2>头戴式无线降噪立体声蓝牙耳机</h2>
+                    <h2>{{pro_del.size}}</h2>
+                    <h2>{{pro_del.name}}</h2>
                     <div class="text">
-                        <p>♥主动噪音消除 - 主动噪音消除技术消除分散的周围噪音，私人聆听体验只为你。将噪音降低85％，
-                            通过轻按开关，降低环境噪音。
-                            对于减少城市交通的噪音，在繁忙的办公室内飞机机舱的嗡嗡声或喧哗声很好。</p>
-                        <p>♥高保真的声音使低音丰富而明显。中高档也很清晰和平衡。即使你转向高音量，失真也很小。</p>
-                        <p>♥可折叠和舒适 - 头耳耳塞舒适。慷慨的记忆耳垫和柔软的皮革。完全可调的115度旋转耳机头带。随附一个免费的拉链盒，所以你可以保持在你的背包保护好或手
-                            提箱。</p>
-                        <p>♥蓝牙立体声 - 采用先进的蓝牙CSR芯片。失真很小。提供深沉，沉浸式的声音音量，使他们成为最
-                            好的蓝牙无线耳机。</p>
-                        <p>♥无线和有线连接 - 可靠的蓝牙无缝连接到所有蓝牙设备33英尺有效范围。直观的控制和内置麦克风</p>
+                        <p>{{pro_del.descript}}</p>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="min-width shopimg"><img src="../assets/img/shopimg3_02.jpg"  v-if="$store.state.ispc"/></div>
+        </div> 
         <div class="video min-width">
             <img src="../assets/img/backbg_03.jpg"/>
-            <video class="videobox" src=""  width="320" height="240" controls="controls">
+            <video class="videobox" v-bind:src="sub_del.subject_video"  width="320" height="240" controls="controls">
                 Your browser does not support the video tag.
             </video>
         </div>
-        <div class="music min-width"><img src="../assets/img/muckbg_02.jpg" v-if="$store.state.ispc"/></div>
+        <div class="min-width music" v-for="(item,index) in sub_del.subject_img" :key="index" v-if="index>=1">
+            <img v-bind:src="item"  v-if="$store.state.ispc"/>
+        </div>
         <div class="video min-width accord">
             <img src="../assets/img/backbg_03.jpg" v-if="$store.state.ispc"/>
             <div class="accordion width">
-                <h2>NB-H88</h2>
-                <h2>头戴式无线降噪立体声蓝牙耳机</h2>
+                <h2>{{pro_del.size}}</h2>
+                <h2>{{pro_del.name}}</h2>
                 <ul>
-                    <li> <p>详细参数  <i class="icon" @click="show = !show"><img :src="show ? require('../assets/img/line-down.png') : require('../assets/img/line-add.png')"/></i></p>
+                    <li> <p>详细参数  <i class="icon" @click="show()"><img :src="isshow ? require('../assets/img/line-down.png') : require('../assets/img/line-add.png')"/></i></p>
                         <transition name="fade">
-                            <div class="text" v-if="show">
-                                <p>高保真的声音使低音丰富而明显。中高档也很清晰和平衡。即使你转向高音量，失真也很小可折叠和舒适 - 头耳耳塞舒适。慷慨的记忆耳垫和柔软的皮革。
-                                    完全可调的115度旋转耳机头带。随附一个免费的拉链盒，所以你可以保持在你的背包保护好或手 提箱。可靠的蓝牙无缝连接到所有蓝牙设备33英尺有效范围。直观的控制和内置麦克风</p>
-                                <p> 3.5mm AUX端口，带有电缆（附带），用于飞行模式或MP3设备。 300mAh电池使用时间，2小时充电支持14小时主动降噪播放或16小时蓝牙模式。18个月保修。</p>
+                            <div class="text" v-show="isshow">
+                                <p>{{sub_del.size_info}}</p>
                             </div>
                         </transition>
                     </li>
-                    <li> <p>技术特色 <i class="icon"><img src="../assets/img/line-add.png"/></i></p>
+                    <li> <p>技术特色 <i class="icon" @click="show_1()"><img :src="isshow_1 ? require('../assets/img/line-down.png') : require('../assets/img/line-add.png')"/></i></p>
+                        <transition name="fade">
+                            <div class="text" v-show="isshow_1">
+                                <p>{{sub_del.technology_info}}</p>
+                            </div>
+                        </transition>
                     </li>
-                    <li> <p>常见问题 <i class="icon"><img src="../assets/img/line-add.png"/></i></p>
-                    </li>
-                    <li> <p>详细参数 <i class="icon"><img src="../assets/img/line-add.png"/></i></p>
+                    <li> <p>常见问题 <i  @click="show_2()" class="icon"><img :src="isshow_2 ? require('../assets/img/line-down.png') : require('../assets/img/line-add.png')"/></i></p>
+                        <transition name="fade">
+                            <div class="text" v-show="isshow_2">
+                                <p>{{sub_del.problem}}</p>
+                            </div>
+                        </transition>
                     </li>
                 </ul>
             </div>
@@ -70,27 +72,48 @@
         name: "special",
         data(){
             return{
-                show: true,
+                isshow: true,
+                isshow_1: false,
+                isshow_2: false,                
                 url_1: 'model_subject_page/info',
                 url_2: 'product/info',                
                 pro_id: '',
                 pro_del: {},
                 sub_del: {},
-                // params,
             }
         },
         methods:{
             queryCallBack(data) {
-                console.log(data);
-                this.sub_del = data.data || {};
+                console.log(this.pro_del);
+                this.pro_del = data.data || {};
+            },
+            show(){
+                if(this.isshow_1 == true || this.isshow_2 == true ){
+                    this.isshow_1 = false;
+                    this.isshow_2 = false;                    
+                }
+                this.isshow = !this.isshow;
+            },
+            show_1(){
+                if(this.isshow == true || this.isshow_2 == true ){
+                    this.isshow = false;
+                    this.isshow_2 = false;                    
+                }
+                this.isshow_1 = !this.isshow_1;
+            },
+            show_2(){
+                if(this.isshow_1 == true || this.isshow == true ){
+                    this.isshow_1 = false;
+                    this.isshow = false;                    
+                }
+                this.isshow_2 = !this.isshow_2;
             }
         },
-        beforeCreate() {
-            // console.log(1)
-        },
         created(){
-            this.getData(this.url_1);
             this.getData(this.url_2 +'?id='+ this.$route.query.id);
+            this.$http.get(this.url_1+ '?lang=' + this.getCookie('lang')+'&product_id=' + this.$route.query.id).then((data_1) => {
+                this.sub_del = data_1.data || {};
+            })
         },
         components:{
             navigation,

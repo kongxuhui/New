@@ -1,30 +1,65 @@
 <template>
+<div>
     <div class="alert">
-        <p class="close"><img src="../assets/img/close.png" @click="close()"/></p>
-        <h2>{{$t('message.Chaozhekou')}}</h2>
-        <h2>{{$t('message.Zhekouma')}}</h2>
-        <div class="input"><input type="email" placeholder="@输入你的邮箱"/></div>
-        <div class="btn"><a href="javascript:;">{{$t('message.confirmsubscription')}}</a></div>
+        <div>
+            <p v-show="flag_2" class="close"><img src="../assets/img/close.png" @click="close()"/></p>
+            <h2 v-show="flag_2">{{$t('message.Chaozhekou')}}</h2>
+            <h2 v-show="flag_2">{{$t('message.Zhekouma')}}</h2>
+            <div v-show="flag_2" class="input"><input v-model="input1" type="email" placeholder="@输入你的邮箱"/></div>
+            <p v-show="flag">邮箱格式有误，请重新输入。</p>
+            <div v-show="flag_2" class="btn"><a href="javascript:;" @click="handlePost()">{{$t('message.confirmsubscription')}}</a></div>
+            <div class="tip" v-show="flag_1">{{$t('message.Tip')}}</div>
+            <div class="btn" @click="handleFlag()" v-show="flag_1">
+                <a href="javascript:;">{{$t('message.Sure')}}</a>
+            </div>            
+        </div>
     </div>
+</div>
 </template>
 
 <script>
     export default {
-        name: "alert",
+        name: "alert",     
         data(){
             return{
-
+                url:'user/add',
+                input1:'',
+                flag: false,
+                flag_1: false,
+                flag_2: true,
+                flag_3: true,                
             }
         },
         methods:{
             close(){
                 this.$emit('closeM',false)
+            },
+            handleFlag(){
+                this.$emit('getFlag',this.flag_3);
+                this.flag_1 = false;                                           
+            },
+            handlePost(){
+                this.$http.post(this.url,{
+                    email: this.input1,
+                    lang: this.getCookie('lang')
+                }).then(data => {
+                    if(data.success){
+                        this.flag_2 = false;
+                        this.flag_1 = data.success;
+                    }else{
+                        this.flag = true;
+                        setTimeout( () => {
+                            this.flag = false;                          
+                        }, 2000);                                                
+                    }
+                })
             }
         }
     }
 </script>
 
 <style scoped lang="less">
+    
     .alert{
         position: fixed;
         top: 20%;
@@ -41,6 +76,12 @@
         -webkit-border-radius: 3px;
         -moz-border-radius: 3px;
         border-radius: 3px;
+        .tip{
+            height:30%;
+            padding-top: 10%;
+            padding-bottom: 10%;
+            text-align: center;
+        }
         .btn{
             padding-top: 10px;
             padding-bottom: 20px;

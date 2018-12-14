@@ -67,14 +67,14 @@
         font-size: 12px;
         line-height: 45px;
         >div{
-            padding: 0 5px;
+            padding: 0 40px;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
             box-sizing: border-box;
         }
     }
     .footer{
-        padding: 15px 5px 7px 5px;
+        padding: 15px 40px 7px 40px;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;

@@ -5,69 +5,34 @@
         <banner></banner>
         <div v-if="$store.state.ispc" class="min-width discount-box">
             <ul class="discount-liat">
-                <li class="clearfix">
-                    <div class="shop-img"><img src="../assets/img/shopimg1_03.jpg"/></div>
+                <li class="clearfix" v-for="(item,index) in discountList" :key="index">
+                    <div class="shop-img"><img v-bind:src="item.product.sale_img"/></div>
                     <div class="shop-text">
-                        <h2>NB-10 无线充电降噪立体声蓝牙耳机</h2>
-                        <p>主动噪音消除*采用双麦克风降噪技术高度提高降噪效果，消除分散的环境噪音的平静，通过轻按开关将环境噪音降低到耳语。对于降低城市交通的噪音，在繁忙的办公室的飞机客舱或中枢的无人机。
-                            在亚马逊中预订享有50%的折扣</p>
+                        <h2>{{item.product.size}}  {{item.product.name}}</h2>
+                        <p>{{item.discount_descript}}</p>
                     </div>
                     <div class="shop-code">
-                        <p>000000005X</p>
-                    </div>
-                </li>
-                <li class="clearfix">
-                    <div class="shop-img"><img src="../assets/img/shopimg1_03.jpg"/></div>
-                    <div class="shop-text">
-                        <h2>NB-10 无线充电降噪立体声蓝牙耳机</h2>
-                        <p>主动噪音消除*采用双麦克风降噪技术高度提高降噪效果，消除分散的环境噪音的平静，通过轻按开关将环境噪音降低到耳语。对于降低城市交通的噪音，在繁忙的办公室的飞机客舱或中枢的无人机。
-                            在亚马逊中预订享有50%的折扣</p>
-                    </div>
-                    <div class="shop-code">
-                        <p>000000005X<img src="../assets/img/yellow_code.png"/><span @click="isShowAlert = true">{{$t('message.Getdiscountcode')}}</span></p>
-                    </div>
-                </li>
-                <li class="clearfix">
-                    <div class="shop-img"><img src="../assets/img/shopimg1_03.jpg"/></div>
-                    <div class="shop-text">
-                        <h2>NB-10 无线充电降噪立体声蓝牙耳机</h2>
-                        <p>主动噪音消除*采用双麦克风降噪技术高度提高降噪效果，消除分散的环境噪音的平静，通过轻按开关将环境噪音降低到耳语。对于降低城市交通的噪音，在繁忙的办公室的飞机客舱或中枢的无人机。
-                            在亚马逊中预订享有50%的折扣</p>
-                    </div>
-                    <div class="shop-code">
-                        <p>000000005X<img src="../assets/img/yellow_code.png"/><span @click="isShowAlert = true">{{$t('message.Getdiscountcode')}}</span></p>
+                        <p>{{item.discount_code}}
+                            <img v-if="!ishide && item.type !='big'" src="../assets/img/yellow_code.png"/>
+                            <span v-if="!ishide && item.type !='big'" @click="isShowAlert = true">{{$t('message.Getdiscountcode')}}</span>
+                        </p>
                     </div>
                 </li>
             </ul>
         </div>
         <div class="mo-box" v-if="!$store.state.ispc">
-            <div class="discount-mo-box">
-                <div class="img"><img src="../assets/img/shopimg1_03.jpg"/></div>
+            <div class="discount-mo-box" v-for="(item,index) in discountList" :key="index">
+                <div class="img"><img v-bind:src="item.product.sale_img"/></div>
                 <div class="text">
-                    <h2><span class="over">NB-10 无线充电降噪立体ss声蓝牙耳机</span> <i class="down"><img src="../assets/img/down.png"/></i></h2>
-                    <p>主动噪音消除*采用双麦克风降噪技术高度提高降噪效果，消除分散的环境噪音的平静，通过轻按开关将环境噪音降低到耳语。对于降低城市交通的噪音，在繁忙的办公室的飞机客舱或中枢的无人机。在亚马逊中</p>
+                    <h2><span class="over">{{item.product.size}}  {{item.product.name}}</span> <i class="down"><img src="../assets/img/down.png"/></i></h2>
+                    <p>{{item.discount_descript}}</p>
                     <div class="code">
-                        <span>000000015X  <b @click="isShowAlert = true"><img src="../assets/img/mo-yellowbg_03.png"/> <i>{{$t('message.Getdiscountcode')}}</i></b></span>
-                    </div>
-                </div>
-            </div>
-            <div class="discount-mo-box">
-                <div class="img"><img src="../assets/img/shopimg1_03.jpg"/></div>
-                <div class="text">
-                    <h2><span class="over">NB-10 无线充电降噪立体ss声蓝牙耳机</span> <i class="down-left"><img src="../assets/img/down-left.png"/></i></h2>
-                    <p>主动噪音消除*采用双麦克风降噪技术高度提高降噪效果，消除分散的环境噪音的平静，通过轻按开关将环境噪音降低到耳语。对于降低城市交通的噪音，在繁忙的办公室的飞机客舱或中枢的无人机。在亚马逊中</p>
-                    <div class="code" v-if="isdown">
-                        <span>000000015X</span>
-                    </div>
-                </div>
-            </div>
-            <div class="discount-mo-box">
-                <div class="img"><img src="../assets/img/shopimg1_03.jpg"/></div>
-                <div class="text">
-                    <h2><span class="over">NB-10 无线充电降噪立体ss声蓝牙耳机</span> <i class="down-left"><img src="../assets/img/down-left.png"/></i></h2>
-                    <p>主动噪音消除*采用双麦克风降噪技术高度提高降噪效果，消除分散的环境噪音的平静，通过轻按开关将环境噪音降低到耳语。对于降低城市交通的噪音，在繁忙的办公室的飞机客舱或中枢的无人机。在亚马逊中</p>
-                    <div class="code" v-if="isdown">
-                        <span>000000015X</span>
+                        <span>{{item.discount_code}}  
+                            <b v-show="!ishide && item.type !='big'" @click="isShowAlert = true">
+                                <img src="../assets/img/mo-yellowbg_03.png"/>
+                                <i>{{$t('message.Getdiscountcode')}}</i>
+                            </b>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -78,7 +43,7 @@
                 enter-active-class="animated flipInX"
                 leave-active-class="animated flipOutX"
         >
-            <alert @closeM="close"  v-if="isShowAlert && $store.state.ispc"></alert>
+            <alert @getFlag="getFlag_1" @closeM="close"  v-if="isShowAlert && $store.state.ispc"></alert>
         </transition>
         <footerd></footerd>
     </div>
@@ -96,18 +61,31 @@
         name: "discount",
         data(){
             return{
+                url_1: 'user/add',
+                url_2: 'discount/list',
                 list:[1,2,2,1],
                 isShowAlert: false,
-                isdown: false
+                isdown: false,
+                discountList: [],
+                ishide: false,
             }
         },
         created(){
-            console.log(this.$store.state.ispc)
+            // console.log(this.$store.state.ispc)
         },
         methods:{
+            queryCallBack(data) {
+                this.discountList = data.data.list || {};
+            },
+            getFlag_1(data){
+                this.ishide = data;
+            },
             close(data){
                 this.isShowAlert = data;
-            }
+            }, 
+        },
+        created() {
+            this.getData(this.url_2);
         },
         components:{
             navigation,
@@ -158,11 +136,12 @@
             }
         }
         .shop-code{
-            width: 30%;
+            width: 240px;
             text-align: center;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
             box-sizing: border-box;
+            margin-left: 10%;
             p{
                 display: inline-block;
                 position: relative;
@@ -170,6 +149,7 @@
                 letter-spacing: 3px;
                 border: 2px solid #f36a22;
                 padding: 2px 5px;
+                width: 100%;
                 >img{
                     position: absolute;
                     top:-2px;
@@ -221,6 +201,7 @@
                         border: 2px solid #f36a22;
                         padding: 0.1rem 0.3rem;
                         position: relative;
+                        width: 12rem;
                         i{
                             position: absolute;
                             top: 50%;

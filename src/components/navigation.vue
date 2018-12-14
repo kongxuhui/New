@@ -2,27 +2,30 @@
     <header class="min-width">
         <div class="header_box clearfix width">
             <div class="left">
-                <img src="../assets/img/logo.png" width="206" height="30" alt="">
+                <!-- <router-link to="/"><img src="../assets/img/logo.png" width="206" height="30" alt=""></router-link> -->
+                <a href="/"><img src="../assets/img/logo.png" width="206" height="30" alt=""></a>
                 <router-link to="/" class="active">{{$t('message.onlineshoppingmall')}}</router-link>
                 <router-link to="/aboutcompany">{{$t('message.aboutcompany')}}</router-link>
                 <router-link to="/discount">{{$t('message.Latestdiscount')}}<i>{{$t('message.discount')}}</i></router-link>
             </div>
             <div class="right clearfix">
                 <div class="search"><input type="text" v-model="searchname"/><i class="icon"></i></div>
-                <div class="city"><i class="icon"></i><span>中文-中国</span>
+                <!-- <div class="city"><i class="icon"></i><span>{{select.langSel}}-{{select.countrySel}}</span> -->
+                <div class="city"><i class="icon"></i><span>{{select.langSel}}</span>                
                     <div class="chouselange">
                         <p>请选择你的站点</p>
                         <div class="clearfix">
                             <div class="cityleft">
                                 <ul>
-                                    <li @click="tabCn"><a href="javascript:;">简体中文 <i class="rightbglan"></i></a></li>
-                                    <li @click="tabEn"><a href="javascript:;">English</a></li>
+                                    <li @click="tab(item,index)" v-for="(item,index) in countryList" :key="index">
+                                        <a href="javascript:;">{{item.name_lang}}
+                                            <i :class="isAdded == index?'rightbglan':'rightbglan_1'"></i> 
+                                        </a>
+                                    </li>                                  
                                 </ul>
                             </div>
-                            <div class="cityright">
-                                <span><img src="../assets/img/chain.png" width="25"/> 中国</span>
-                                <span><img src="../assets/img/chain.png" width="25"/> 中国</span>
-                                <span><img src="../assets/img/chain.png" width="25"/> 中国</span>
+                            <div class="cityright" v-for="(item,index) in countryList" :key="index">
+                                <span><img :src="item.nationalFlag" width="25"/></span>                                
                             </div>
                         </div>
                     </div>
@@ -37,17 +40,51 @@
         name: "navigation",
         data(){
             return{
-                searchname: ''
+                searchname: '',
+                url: 'user/switch_lang',
+                isAdded: 0,
+                select: {
+                    langSel: '简体中文',
+                    countrySel: '中国'
+                },
+                countryList:[
+                    {name: '中国', nationalFlag: require('@/assets/img/CHS.png'), lang: 'CHS', name_lang: '简体中文'},
+                    {name: '英国', nationalFlag: require('@/assets/img/EN.png'), lang: 'EN', name_lang: 'English'},
+                    {name: '西班牙', nationalFlag: require('@/assets/img/ES.png'), lang: 'ES', name_lang: 'Spanish'},
+                    {name: '法国', nationalFlag: require('@/assets/img/FRA.png'), lang: 'FRA', name_lang: 'French'},
+                    {name: '德国', nationalFlag: require('@/assets/img/DE.png'), lang: 'DE', name_lang: 'German'},
+                    {name: '日本', nationalFlag: require('@/assets/img/JP.png'), lang: 'JP', name_lang: 'Japanese'},
+                    {name: '俄罗斯', nationalFlag: require('@/assets/img/RU.png'), lang: 'RU', name_lang: 'Russian'}                
+                ]             
             }
         },
         methods:{
-            tabEn: function () {
-                this.$i18n.locale = 'en'
+            queryCallBack(data) {
+                // this.discountList = data.data.list || {};
             },
-            tabCn: function () {
-                this.$i18n.locale = 'zh'
+            tab(country,idx){
+                this.setCookie('lang',country.lang,365);
+                this.setCookie('isAdded',idx,365);
+                this.setCookie('langSel',country.name_lang,365);
+                this.setCookie('countrySel',country.name,365);              
+                this.isAdded = idx;
+                this.$http.get(this.url,{default_language: country.lang}).then((data) => {
+                    location.reload();
+                })
+            },
+        },
+        created() {
+            if(this.getCookie('isAdded')){
+                this.isAdded = this.getCookie('isAdded');
             }
-        }
+            if(this.getCookie('lang')){
+                this.$i18n.locale = this.getCookie('lang');
+            }
+            if(this.getCookie('langSel')){
+                this.select.langSel = this.getCookie('langSel');     
+                this.select.countrySel = this.getCookie('countrySel');                                   
+            }   
+        },
     }
 </script>
 
@@ -70,10 +107,12 @@
         height: 80px;
         background-color: #000;
         .header_box{
-            padding: 0 5px;
+            // padding: 0 5px;
+            // margin: 0;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
             box-sizing: border-box;
+            width:1280px;
             >.left{
                 float: left;
             }
@@ -84,8 +123,11 @@
                     color: white;
                 }
                 .city{
+                    position: relative;
                     .chouselange{
+                        display: none;
                         opacity: 0;
+                        // z-index: -1;
                         -webkit-transition: all ease 0.4s;
                         -moz-transition: all ease 0.4s;
                         -ms-transition: all ease 0.4s;
@@ -96,7 +138,7 @@
                         -moz-border-radius: 2px;
                         border-radius: 2px;
                         >div>.cityright{
-                            width: 55%;
+                            width: 30%;
                         }
                         >div>.cityleft{
                             width: 45%;
@@ -107,6 +149,12 @@
                             -webkit-box-sizing: border-box;
                             -moz-box-sizing: border-box;
                             box-sizing: border-box;
+                            .rightbglan_1{
+                                width: 7px;
+                                height: 14px;
+                                border:0;
+                                top: 7px;
+                            }
                             .rightbglan{
                                 width: 7px;
                                 height: 14px;
@@ -137,11 +185,11 @@
                             line-height: 30px;
                         }
                         position: absolute;
-                        top: 60px;
+                        top: 55px;
                         width: 280px;
                         background-color: #000;
                         color: white;
-                        right:0;
+                        right: 0px;
                     }
                     // position: relative;
                     cursor: pointer;
@@ -168,7 +216,7 @@
                     opacity: 1;
                 }
                 .search{
-                    width: 200px;
+                    width: 160px;
                     position: relative;
                     border: 1px solid #fff;
                     height: 30px;
@@ -189,7 +237,7 @@
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
                 padding-left: 8px;
-                width: 170px;
+                width: 126px;
                 height: 30px;
                 float: left;
                 font-size: 16px;
@@ -213,21 +261,21 @@
                 padding-top: 3px;
                 position: relative;
                 i{
-                    border: 1px solid #f36a22;
-                    -webkit-border-radius: 2px;
-                    -moz-border-radius: 2px;
-                    border-radius: 2px;
+                    border: 2px solid #f36a22;
+                    -webkit-border-radius: 4px;
+                    -moz-border-radius: 5px;
+                    border-radius: 4px;
                     color: #f36a22;
                     display: inline-block;
                     position: absolute;
                     height: 15px;
                     line-height: 15px;
                     text-align: center;
-                    width: 30px;
                     font-style: normal;
-                    top: -4px;
-                    right: -40px;
+                    top: 5px;
+                    right: -33px;
                     font-size: 12px;
+                    border: 1px solid #f36a22;
                 }
             }
             a.router-link-exact-active{

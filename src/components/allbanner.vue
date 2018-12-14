@@ -6,6 +6,8 @@
                 <swiper-slide class="banner-item" v-for="(item,index) in shopList" :key="index">
                     <div>
                         <div class="box">
+                            <p>{{item.size}}</p>
+                            <p>{{item.name}}</p>                            
                             <img v-bind:src="item.sale_img"/>
                         </div>
                         <div class="model">
@@ -47,7 +49,6 @@
         },
         methods:{
             queryCallBack(data) {
-                console.log(data.data);
                 this.shopList = data.data.list || [];
                 // this.swiperOption.slidesPerView = this.shopList.length;
             },
@@ -69,15 +70,37 @@
 </script>
 <style scoped lang="less">
     .allbanner {
+        .swiper-container{
+            width: 100%;
+        }
         background-color: #f0efef;
         padding: 40px 0;
     }
     .allbanner .banner-item{
         text-align: center;
-        width: 30%;
-        background-color: #f8f8f8;
+        margin-right: 60px !important;
+        height: 378px;
+        // background-color: #f8f8f8;
         >div{
             position: relative;
+            background-color: #fff;
+            .box{
+                padding-top: 20px;
+                p{
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    font-size: 18px;
+                    margin: 10px 0;
+                    font-family: '微软雅黑';
+                    font-weight: 600;
+                    padding: 0 30px;
+                }
+                img{
+                    width: 100%;
+                    height: 271px;
+                }
+            }
             .model{
                 opacity: 0;
                 position: absolute;
@@ -130,7 +153,14 @@
     @media screen and (max-width: 768px) {
         .allbanner {
             background-color: white;
+            padding-bottom: 1rem;
+            padding-top: 0;
+            .banner-item > div .box{
+                padding-top: 20px;
+                background-color: #fff;
+            }
             .banner-item{
+                height: auto;
                 > div .model{
                     position: static;
                     opacity: 1;
@@ -147,8 +177,8 @@
                         -o-transform: translateY(0) translateX(0);
                         transform: translateY(0) translateX(0);
                         >p{
-                            height: 3.5rem;
-                            line-height: 3.5rem;
+                            height: 2.2rem;
+                            line-height: 2.2rem;
                             padding: 0;
                             font-size: 1.4rem;
                             border: 0;

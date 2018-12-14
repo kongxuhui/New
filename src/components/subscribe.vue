@@ -4,13 +4,17 @@
             <div class="writemsg">
                 <p><img src="../assets/img/message.jpg"/> <span>{{$t('message.SubscribetodeepLIAN')}}</span></p>
                 <div class="text">
-                    <textarea placeholder="时刻关注深联创所有最新动态"></textarea>
+                    <div>时刻关注深联创所有最新动态</div>
+                    <!-- <textarea disabled="disabled" placeholder="时刻关注深联创所有最新动态"></textarea> -->
                     <p class="clearfix"><input v-model="input1" type="email" class="fl" placeholder="输入你的电子邮箱"/><span class="bg fr" @click="handlePost"></span></p>
                 </div>
                 <div class="btn" v-if="!$store.state.ispc"><a href="javascript:;">{{$t('message.confirmsubscription')}}</a></div>
                 <div class="hascribe" v-show="flag">
                     <p><img src="../assets/img/right.jpg" alt=""> <span>{{$t('message.successfullysubscribed')}}</span></p>
                     <p>{{$t('message.Tdb')}}</p>
+                </div>
+                <div class="hascribe" v-show="!flag_1">
+                    <p>邮箱格式有误，请重新输入。</p>
                 </div>
             </div>
         </div>
@@ -26,21 +30,25 @@
                 shopList: [],
                 input1:'',
                 flag: false,
+                flag_1: true,
             }
         },
         methods: {
             handlePost(){
                 this.$http.post(this.url,{
-                    email: this.input1
-                }).then((data) => {
-                    // if(data.errors.length == 0){
-                    //     this.$message({
-                    //         type: 'error',
-                    //         message: data.message
-                    //     });
-                    // }else{
-                        this.flag = true;
-                    // }
+                    email: this.input1,
+                    lang: this.getCookie('lang')
+                }).then(data => {
+                    this.input1 = '';
+                    if(data.success){
+                        this.flag = data.success;
+                    }else{
+                        this.flag_1 = data.success;                        
+                    }
+                    setTimeout( () => {
+                        this.flag = false;
+                        this.flag_1 = true;                          
+                    }, 2000)
                 })
             }
         },
@@ -130,10 +138,13 @@
             display: inline-block;
             margin-right: 4px;
         }
-        .text>textarea{
+        .text>div{
             padding: 8px;
             height: 200px;
-            border-color: #666;
+            border: 1px solid #666;
+            text-align: left;
+            color: #666;
+            letter-spacing:4px;
         }
         .text>textarea,.text>p{
             width: 100%;
@@ -148,6 +159,7 @@
             font-size: 16px;
             height: 30px;
             padding-left: 8px;
+            letter-spacing:4px;
         }
         .text>p .bg{
             display: inline-block;

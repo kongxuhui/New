@@ -2,39 +2,39 @@
     <div class="goods">
         <navigation v-if="$store.state.ispc"></navigation>
         <mo-navigation v-if="!$store.state.ispc"></mo-navigation>
-        <banner></banner>
+        <banner :banner-list="bannerList"></banner>
         <div class="features width">
             <h2>产品特色技术</h2>
             <p>感受特色技术的强大</p>
             <div>
                 <ul>
-                    <li>
+                    <li v-for="(item,index) in charaList.characteristic_icon" v-if="index == 0">
                         <div class="img">
-                            <img src="../assets/img/tag1.png" alt="">
+                            <img v-bind:src="item" alt="">
                         </div>
-                        <p>降噪耳机</p>
-                        <div class="overhide"> *降噪耳机，采用主动噪音控制，不同于一般耳机的被动隔音。</div>
+                        <!-- <p>降噪耳机</p> -->
+                        <div class="overhide">{{charaList.characteristic_a}}</div>
                     </li>
-                    <li>
+                    <li v-for="(item,index) in charaList.characteristic_icon" v-if="index == 1">
                         <div class="img">
-                            <img src="../assets/img/tag2.png" alt="">
+                            <img v-bind:src="item" alt="">
                         </div>
-                        <p>IPX-6防水级别</p>
-                        <div class="overhide"> *大浪的防水保护，可以持续2-3分钟抵抗水下3米的深度，100公升/分钟的流速，100n/m的压力。</div>
+                        <!-- <p>IPX-6防水级别</p> -->
+                        <div class="overhide">{{charaList.characteristic_b}}</div>
                     </li>
-                    <li>
+                    <li v-for="(item,index) in charaList.characteristic_icon" v-if="index == 2">
                         <div class="img">
-                            <img src="../assets/img/tag3.png" alt="">
+                            <img v-bind:src="item" alt="">
                         </div>
-                        <p>HI-FI动感魔音</p>
-                        <div class="overhide">*频率所对应的灵敏度数值就是频率响应，绘制成图象就是频率响应曲线,形成高保真HI-FI</div>
+                        <!-- <p>HI-FI动感魔音</p> -->
+                        <div class="overhide">{{charaList.characteristic_c}}</div>
                     </li>
-                    <li>
+                    <li v-for="(item,index) in charaList.characteristic_icon" v-if="index == 3">
                         <div class="img">
-                            <img src="../assets/img/tag4.png" alt="">
+                            <img v-bind:src="item" alt="">
                         </div>
-                        <p>超强续航能力</p>
-                        <div class="overhide">*超强续航能力，充电五分钟higi两小时</div>
+                        <!-- <p>超强续航能力</p> -->
+                        <div class="overhide">{{charaList.characteristic_d}}</div>
                     </li>
                 </ul>
             </div>
@@ -61,8 +61,8 @@
                                         </div>
                                     </div>
                                     <div class="btn clearfix">
-                                        <a href="javascript:;" class="fl">Amazon</a>
-                                        <a href="javascript:;" class="fr">AliExpress</a>
+                                        <a href="javascript:;" class="fl" data-text="Amazon"><span>Amazon</span></a>
+                                        <a href="javascript:;" class="fr" data-text="AliExpress"><span>AliExpress</span></a>
                                     </div>
                                 </div>
                             </swiper-slide>
@@ -91,7 +91,11 @@
         data(){
             return{
                 url: 'product/menu_list',
+                url_1: 'model_product_page/info',
+                url_2: 'model_main_page/info',
                 menuList: [],
+                charaList: {},
+                bannerList: [],
                 swiperOption: {
                     slidesPerView: 3,
                     spaceBetween: 50,
@@ -107,11 +111,18 @@
         },
         methods:{
             queryCallBack(data) {
+                // this.bannerList = data.data.banner || [];
                 this.menuList = data.data || [];
             },
         },
         created(){
             this.getData(this.url);
+            this.$http.get(this.url_1+ '?lang=' + this.getCookie('lang')).then((data_1) => {
+                this.charaList = data_1.data || {};
+            })
+            this.$http.get(this.url_2).then((data_2) => {
+                this.bannerList = data_2.data.banner || {};
+            })
             if(!this.$store.state.ispc){
                 this.swiperOption.slidesPerView = 1
             }
@@ -133,11 +144,13 @@
         width: 35px;
         height: 55px;
         background: url("../assets/img/prev.png") no-repeat center;
+        left: 0px;
     }
     .swiper-button-next{
         width: 35px;
         height: 55px;
         background: url("../assets/img/nexy.png") no-repeat center;
+        right: 0px;
     }
     .typeclass{
         .ccc{
@@ -166,18 +179,71 @@
                     padding-bottom: 25px;
                     background-color: #ebebeb;
                     a{
+                        color: white;
+                        background-color: #000;
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        box-sizing: border-box;
                         display: inline-block;
                         height: 35px;
+                        min-width: 35%;
                         line-height: 35px;
-                        width: 45%;
-                        color: white;
                         font-size: 20px;
-                    }
-                    a:first-child{
-                        background-color: #f22a2a;
-                    }
-                    a:last-child{
-                        background-color: #000000;
+                        margin-right: 20px;
+                        overflow: hidden;
+                        position: relative;
+                        &::before,
+                        &::after{
+                            content: attr(data-text);
+                            position: absolute;
+                            width: 100%;
+                            // height: 44%;
+                            // padding: 3% 3%;
+                            background: #000;
+                            color: #fff;
+                            overflow: hidden;
+                            -webkit-transition: -webkit-transform 0.3s;
+                            transition: transform 0.3s;
+                            -webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+                            transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+                        }
+                        &::before {
+                            // padding-top: 10px;
+                            // top: 4px;
+                            left: 0;
+                        }
+                        &::after {
+                            bottom: 0;
+                            line-height: 0;
+                        }
+                        >span {
+                            display: block;
+                            padding-left: 4%;
+                            width: 96%;
+                            height: 100%;   
+                            line-height: 35px;
+                            -webkit-transform: scale3d(0.2, 0.2, 1);
+                            transform: scale3d(0.2, 0.2, 1);
+                            opacity: 0;
+                            background: red;
+                            -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
+                            transition: transform 0.3s, opacity 0.3s;
+                            -webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+                            transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+                        }
+                        &:hover::before {
+                            -webkit-transform: translate3d(0, -100%, 0);
+                            transform: translate3d(0, -100%, 0);
+                        }
+                        &:hover::after {
+                            -webkit-transform: translate3d(0, 100%, 0);
+                            transform: translate3d(0, 100%, 0);
+                        }
+                        &:hover > span {
+                            opacity: 1;
+                            -webkit-transform: scale3d(1, 1, 1);
+                            transform: scale3d(1, 1, 1);
+                        }
                     }
                 }
                 text-align: center;
@@ -190,9 +256,9 @@
                     -moz-box-sizing: border-box;
                     box-sizing: border-box;
                     >img{
-                        width: 80%;
+                        width: 100%;
+                        height: 270px;
                     }
-                    padding-top: 20px;
                     >p{
                         text-align: right;
                         color: #666;
@@ -205,6 +271,11 @@
                         color: #666;
                         font-size: 16px;
                         text-indent: 10px;
+                        p{
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
                         .price{
                             padding-top: 3px;
                             color: #f22a2a;
@@ -237,6 +308,7 @@
             position: relative;
         }
         .top{
+            width: 100%;
             padding: 20px 0;
             background-color: #000;
         }
@@ -256,6 +328,7 @@
     .features{
         padding-top: 20px;
         color: #666666;
+        width: 80%;     
         ul{
             li{
                 display: inline-block;

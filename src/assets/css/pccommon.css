@@ -1,13 +1,25 @@
 .min-width{
     width: 100%;
-    min-width: 1100px;
+    /* max-width: 1280px; */
+    margin: 0 auto;
 }
 .width{
-    width: 85%;
+    width: 100%;
     margin: 0 auto;
-    max-width: 1680px;
-    min-width: 1100px;
+    max-width: 1280px;
+    min-width: 1280px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+/* @media (max-width: 1439px) and (min-width: 1200px){
+    .width {
+        width: 1208px;
+    }
+}
+
+@media screen and (max-width: 1200px){
+    .width {
+        width: 1068px;
+    }
+} */

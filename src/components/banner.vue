@@ -1,5 +1,5 @@
 <template>
-    <div class="banner min-width">
+    <div class="banner width">
         <swiper :options="swiperOption">
             <swiper-slide v-for="(item,index) in bannerList" :key="index" class="banner_img">
                 <img v-bind:src="item">
